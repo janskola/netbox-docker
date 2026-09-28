@@ -19,12 +19,30 @@ Check anytime with:
 
 ## Local customizations (as of the initial fork)
 
-- configuration/plugins.py  — modified
+- configuration/plugins.py  — modified: enables netbox_diode_plugin + netbox_dns
 - Dockerfile-custom         — added
 - plugin_requirements.txt   — added
 
 These live as regular commits on the release branch, on top of
 upstream's history.
+
+### netbox_diode_plugin config
+
+`configuration/plugins.py` sets `diode_target_override` (just a hostname, fine to commit) but reads
+`netbox_to_diode_client_secret` from the `NETBOX_TO_DIODE_CLIENT_SECRET` env var — **never hardcode that secret
+here**, this fork is public. Supply it via `docker-compose.override.yml` (gitignored):
+
+    services:
+      netbox:
+        environment:
+          NETBOX_TO_DIODE_CLIENT_SECRET: "<secret>"
+      netbox-worker:
+        environment:
+          NETBOX_TO_DIODE_CLIENT_SECRET: "<secret>"
+
+This must be the same secret registered for the `netbox-to-diode` OAuth2 client in
+[`../diode-docker/`](../diode-docker/README.md)'s Hydra instance (`oauth2/client/client-credentials.json` there).
+If you rotate one side, rotate both and restart `diode-auth-bootstrap` + this stack's `netbox`/`netbox-worker`.
 
 ## Pulling in upstream updates
 
