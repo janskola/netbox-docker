@@ -1,0 +1,4 @@
+FROM netboxcommunity/netbox:latest
+
+COPY plugin_requirements.txt /opt/netbox/
+RUN uv pip install --no-cache-dir -r /opt/netbox/plugin_requirements.txt

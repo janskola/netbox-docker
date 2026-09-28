@@ -1,0 +1,2 @@
+netboxlabs-diode-netbox-plugin
+netbox-plugin-dns
